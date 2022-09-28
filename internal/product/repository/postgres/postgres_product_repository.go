@@ -1,18 +1,38 @@
 package postgres
 
 import (
+	"log"
+	"os"
 	"product-service/internal/product"
-	"product-service/internal/product/interfaces"
+	"product-service/internal/product/repository"
 
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
+func NewConnection() *gorm.DB {
+	host := os.Getenv("PRODUCT_POSTGRES_HOST")
+	port := os.Getenv("PRODUCT_POSTGRES_PORT")
+	postgres_db := os.Getenv("PRODUCT_POSTGRES_DB")
+	postgres_user := os.Getenv("PRODUCT_POSTGRES_USER")
+	postgres_password := os.Getenv("PRODUCT_POSTGRES_PASSWORD")
+
+	stringConnection := "host=" + host + " user=" + postgres_user + " password=" + postgres_password + " dbname=" + postgres_db + " port=" + port + " sslmode=disable" + " TimeZone=America/Sao_Paulo"
+
+	gorm, err := gorm.Open(postgres.Open(stringConnection), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Can not connect with postgres")
+	}
+	gorm.AutoMigrate(product.Product{})
+	return gorm
+}
+
 type ProductRepository struct {
-	interfaces.ProductRepositoryInterface
+	repository.ProductRepositoryInterface
 	postgres *gorm.DB
 }
 
-func NewProductRepository(db *gorm.DB) *ProductRepository {
+func NewProductPostgresRepository(db *gorm.DB) *ProductRepository {
 	return &ProductRepository{
 		postgres: db,
 	}

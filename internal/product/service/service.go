@@ -2,17 +2,25 @@ package service
 
 import (
 	"product-service/internal/product"
-	"product-service/internal/product/interfaces"
+	"product-service/internal/product/repository"
 )
 
-func NewProductService(repository interfaces.ProductRepositoryInterface) interfaces.ProductServiceInterface {
+type ProductServiceInterface interface {
+	Create(product *product.Product) (*product.Product, error)
+	GetById(ID string) (*product.Product, error)
+	GetAll() ([]*product.Product, error)
+	Delete(ID string) (bool, error)
+	Uptate(ID string, product *product.Product) (*product.Product, error)
+}
+
+func NewProductService(repository repository.ProductRepositoryInterface) ProductServiceInterface {
 	return &ProductService{
 		Repository: repository,
 	}
 }
 
 type ProductService struct {
-	Repository interfaces.ProductRepositoryInterface
+	Repository repository.ProductRepositoryInterface
 }
 
 func (productService *ProductService) Create(product *product.Product) (*product.Product, error) {

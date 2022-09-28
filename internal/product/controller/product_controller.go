@@ -1,15 +1,15 @@
-package handler
+package controller
 
 import (
 	"encoding/json"
 	"product-service/internal/product"
-	"product-service/internal/product/interfaces"
+	"product-service/internal/product/service"
 
 	"github.com/gofiber/fiber/v2"
 	uuid "github.com/satori/go.uuid"
 )
 
-func CreateProduct(fiberContext *fiber.Ctx, productService interfaces.ProductServiceInterface) error {
+func CreateProduct(fiberContext *fiber.Ctx, productService service.ProductServiceInterface) error {
 	newProduct := new(product.Product)
 	newProduct.ID = uuid.NewV4().String()
 	if err := json.Unmarshal(fiberContext.Body(), newProduct); err != nil {
@@ -27,18 +27,18 @@ func CreateProduct(fiberContext *fiber.Ctx, productService interfaces.ProductSer
 	return nil
 }
 
-func GetProductById(fiberContext *fiber.Ctx, productService interfaces.ProductServiceInterface) error {
+func GetProductById(fiberContext *fiber.Ctx, productService service.ProductServiceInterface) error {
 	return nil
 }
 
-func GetAllProducts(fiberContext *fiber.Ctx, productService interfaces.ProductServiceInterface) error {
+func GetAllProducts(fiberContext *fiber.Ctx, productService service.ProductServiceInterface) error {
 	return nil
 }
 
-func UpdateProducts(fiberContext *fiber.Ctx, productService interfaces.ProductServiceInterface) error {
+func UpdateProducts(fiberContext *fiber.Ctx, productService service.ProductServiceInterface) error {
 	return nil
 }
 
-func DeleteProduct(fiberContext *fiber.Ctx, productService interfaces.ProductServiceInterface) error {
+func DeleteProduct(fiberContext *fiber.Ctx, productService service.ProductServiceInterface) error {
 	return nil
 }

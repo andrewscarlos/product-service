@@ -1,33 +1,33 @@
 package router
 
 import (
-	"product-service/internal/product/handler"
-	"product-service/internal/product/interfaces"
+	"product-service/internal/product/controller"
+	"product-service/internal/product/service"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func RegisterRouter(router fiber.Router, productSercice interfaces.ProductServiceInterface) {
+func NewRouters(router fiber.Router, productSercice service.ProductServiceInterface) {
 	productRouterServiceGroup := router.Group("/product")
 
 	productRouterServiceGroup.Post("/", func(fiberContext *fiber.Ctx) error {
-		return handler.CreateProduct(fiberContext, productSercice)
+		return controller.CreateProduct(fiberContext, productSercice)
 	})
 
 	productRouterServiceGroup.Get("/:id", func(fiberContext *fiber.Ctx) error {
-		return handler.GetProductById(fiberContext, productSercice)
+		return controller.GetProductById(fiberContext, productSercice)
 	})
 
 	productRouterServiceGroup.Get("/", func(fiberContext *fiber.Ctx) error {
-		return handler.GetAllProducts(fiberContext, productSercice)
+		return controller.GetAllProducts(fiberContext, productSercice)
 	})
 
 	productRouterServiceGroup.Put("/:id", func(fiberContext *fiber.Ctx) error {
-		return handler.UpdateProducts(fiberContext, productSercice)
+		return controller.UpdateProducts(fiberContext, productSercice)
 	})
 
 	productRouterServiceGroup.Delete("/:id", func(fiberContext *fiber.Ctx) error {
-		return handler.DeleteProduct(fiberContext, productSercice)
+		return controller.DeleteProduct(fiberContext, productSercice)
 	})
 
 }

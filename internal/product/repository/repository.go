@@ -1,8 +1,8 @@
-package interfaces
+package repository
 
 import "product-service/internal/product"
 
-type ProductServiceInterface interface {
+type ProductRepositoryInterface interface {
 	Create(product *product.Product) (*product.Product, error)
 	GetById(ID string) (*product.Product, error)
 	GetAll() ([]*product.Product, error)
