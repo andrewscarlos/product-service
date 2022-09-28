@@ -2,10 +2,12 @@ FROM golang:1.19
 
 WORKDIR /usr/app
 
-COPY go.mod ./
+COPY go.mod go.sum ./
 
-RUN go mod tidy
+RUN go mod download 
 
-EXPOSE 3333
+COPY . .
 
-CMD [ "go", "run", "main.go" ]
+EXPOSE 3001
+
+CMD [ "go", "run", "cmd/product_service/main.go" ]

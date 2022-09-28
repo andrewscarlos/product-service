@@ -1,13 +1,12 @@
 package postgres
 
 import (
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"log"
 	"os"
 	"product-service/internal/product"
 	"product-service/internal/product/repository"
-
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 )
 
 func NewConnection() *gorm.DB {
@@ -27,18 +26,17 @@ func NewConnection() *gorm.DB {
 	return gorm
 }
 
-type ProductRepository struct {
-	repository.ProductRepositoryInterface
+type ProductPostgresRepository struct {
 	postgres *gorm.DB
 }
 
-func NewProductPostgresRepository(db *gorm.DB) *ProductRepository {
-	return &ProductRepository{
+func NewProductPostgresRepository(db *gorm.DB) repository.ProductRepositoryInterface {
+	return &ProductPostgresRepository{
 		postgres: db,
 	}
 }
 
-func (repository *ProductRepository) Create(productData *product.Product) (*product.Product, error) {
+func (repository *ProductPostgresRepository) Create(productData *product.Product) (*product.Product, error) {
 	productCreated := repository.postgres.Create(productData)
 
 	if productCreated.Error != nil {
@@ -48,7 +46,7 @@ func (repository *ProductRepository) Create(productData *product.Product) (*prod
 	return productData, nil
 }
 
-func (repository *ProductRepository) GetById(ID string) (*product.Product, error) {
+func (repository *ProductPostgresRepository) GetById(ID string) (*product.Product, error) {
 
 	product := &product.Product{}
 
@@ -61,7 +59,7 @@ func (repository *ProductRepository) GetById(ID string) (*product.Product, error
 	return product, nil
 }
 
-func (repository *ProductRepository) GetAll() ([]*product.Product, error) {
+func (repository *ProductPostgresRepository) GetAll() ([]*product.Product, error) {
 	var products []*product.Product
 
 	err := repository.postgres.Find(&products).Error
@@ -71,7 +69,7 @@ func (repository *ProductRepository) GetAll() ([]*product.Product, error) {
 	return products, nil
 }
 
-func (repository *ProductRepository) Delete(ID string) (bool, error) {
+func (repository *ProductPostgresRepository) Delete(ID string) (bool, error) {
 	deletedProduct := repository.postgres.Delete(ID)
 
 	if deletedProduct.Error != nil {
@@ -80,7 +78,7 @@ func (repository *ProductRepository) Delete(ID string) (bool, error) {
 	return true, nil
 }
 
-func (repository *ProductRepository) Uptate(ID string, product *product.Product) (*product.Product, error) {
+func (repository *ProductPostgresRepository) Uptate(ID string, product *product.Product) (*product.Product, error) {
 	productUpdated := repository.postgres.Update(ID, product)
 
 	if productUpdated.Error != nil {

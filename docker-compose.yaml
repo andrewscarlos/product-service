@@ -13,17 +13,17 @@ services:
       - POSTGRES_DB=product
     volumes:
       - pgdata:/data/postgres
-#   goapp:
-#     build: .
-#     container_name: goapp
-#     ports:
-#       - 3333:3333
-#     volumes:
-#       - .:/usr/app
-#     links:
-#       - product_database
-#     depends_on:
-#       - product_database
+  # goapp:
+  #   build: .
+  #   container_name: goapp
+  #   ports:
+  #     - 3333:3333
+  #   volumes:
+  #     - .:/usr/app
+  #   links:
+  #     - product_database
+  #   depends_on:
+  #     - product_database
 
 volumes:
   pgdata:

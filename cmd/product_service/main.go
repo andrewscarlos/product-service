@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"product-service/internal/product/repository/postgres"
-	"product-service/internal/product/router"
-	"product-service/internal/product/service"
-
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"log"
+	"product-service/internal/product/repository"
+	"product-service/internal/product/repository/mongodb"
+	//"product-service/internal/product/repository/postgres"
+	"product-service/internal/product/router"
+	"product-service/internal/product/service"
 )
 
 func main() {
@@ -17,8 +18,13 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	db := postgres.NewConnection()
-	productRepository := postgres.NewProductPostgresRepository(db)
+	//postgresdb := postgres.NewConnection()
+	//postgresRepository := postgres.NewProductPostgresRepository(postgresdb)
+
+	mongodbCon := mongodb.NewConnection()
+	mongodbRepository := mongodb.NewProductMongoDbRepository(mongodbCon)
+
+	productRepository := repository.NewProductRepository(mongodbRepository)
 	productService := service.NewProductService(productRepository)
 	app := fiber.New(fiber.Config{})
 	routes := app.Group("/v1")
