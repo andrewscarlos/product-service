@@ -10,7 +10,7 @@ import (
 	postgresImplementation"product-service/pkg/repository/postgres"
 
 	//mongoDbImplementation"product-service/pkg/repository/mongodb"
-	"product-service/internal/product/controller/http"
+	"product-service/internal/product/controller"
 
 	"product-service/internal/product/service"
 )
@@ -31,7 +31,7 @@ func main() {
 	productService := service.NewProductService(productRepository)
 	app := fiber.New(fiber.Config{})
 	routes := app.Group("/v1")
-	http.NewRouters(routes, productService)
+	controller.NewRouters(routes, productService)
 	fmt.Println("product service")
 	app.Listen(":3001")
 }
