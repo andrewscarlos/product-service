@@ -1,12 +1,13 @@
 package postgres
 
 import (
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"log"
 	"os"
 	"product-service/internal/product"
 	"product-service/internal/product/repository"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func NewConnection() *gorm.DB {
@@ -22,7 +23,7 @@ func NewConnection() *gorm.DB {
 	if err != nil {
 		log.Fatal("Can not connect with postgres")
 	}
-	gorm.AutoMigrate(product.Product{})
+	gorm.AutoMigrate(product.Order{}, product.Product{})
 	return gorm
 }
 

@@ -1,4 +1,4 @@
-package controller
+package http
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 
 func CreateProduct(fiberContext *fiber.Ctx, productService service.ProductServiceInterface) error {
 	newProduct := new(product.Product)
-	newProduct.ID = uuid.NewV4().String()
+	newProduct.ID = uuid.NewV4()
 	if err := json.Unmarshal(fiberContext.Body(), newProduct); err != nil {
 		return fiberContext.Status(fiber.StatusBadRequest).JSON(map[string]string{
 			"message": err.Error(),

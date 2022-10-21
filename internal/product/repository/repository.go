@@ -36,3 +36,4 @@ func (pr *ProductRepository) Delete(ID string) (bool, error) {
 func (pr *ProductRepository) Uptate(ID string, product *product.Product) (*product.Product, error) {
 	return pr.Persister.Uptate(ID, product)
 }
+
