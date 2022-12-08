@@ -16,10 +16,25 @@ import (
 	"google.golang.org/grpc/reflection"
 	//mongoDbImplementation"product-service/pkg/repository/mongodb"
 	"product-service/internal/product/controller"
-
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"product-service/internal/product/service"
 )
 
+// @title Fiber Swagger Example API
+// @version 2.0
+// @description This is a sample server server.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:3000
+// @BasePath /
+// @schemes http
 func main() {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -35,6 +50,7 @@ func main() {
 	productRepository := repository.NewProductRepository(postgresRepository)
 	productService := service.NewProductService(productRepository)
 	app := fiber.New(fiber.Config{})
+	app.Get("/docs/*", swagger.HandlerDefault)
 	routes := app.Group("/v1")
 	controller.NewRouters(routes, productService)
 

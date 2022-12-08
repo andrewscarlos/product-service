@@ -8,7 +8,14 @@ import (
 
 func NewRouters(router fiber.Router, productSercice service.ProductServiceInterface) {
 	productRouterServiceGroup := router.Group("/product")
-
+	// HealthCheck godoc
+	// @Summary Show the status of server.
+	// @Description create new product.
+	// @Tags root
+	// @Accept */*
+	// @Produce json
+	// @Success 200 {object} map[string]interface{}
+	// @Router / [post]
 	productRouterServiceGroup.Post("/", func(fiberContext *fiber.Ctx) error {
 		return CreateProduct(fiberContext, productSercice)
 	})
