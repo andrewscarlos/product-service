@@ -3,12 +3,17 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
+	//"os"
+	"product-service/internal/product/pb"
 	"product-service/internal/product/repository"
+
+	postgresImplementation "product-service/pkg/repository/postgres"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	postgresImplementation"product-service/pkg/repository/postgres"
-
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	//mongoDbImplementation"product-service/pkg/repository/mongodb"
 	"product-service/internal/product/controller"
 
@@ -32,6 +37,26 @@ func main() {
 	app := fiber.New(fiber.Config{})
 	routes := app.Group("/v1")
 	controller.NewRouters(routes, productService)
-	fmt.Println("product service")
+
+	lis, err := net.Listen("tcp", "localhost:5000")
+
+	if err != nil {
+		log.Fatalf("Could not connect: %v", err)
+	}
+
+	grpcServer := grpc.NewServer()
+
+	pb.RegisterProductControllerServer(grpcServer, controller.NewProductGrpcController(productService))
+
+	reflection.Register(grpcServer)
+
+	go func() {
+		fmt.Println("product service running on grpc port 5000")
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatalf("Could not serve: %v", err)
+		}
+
+	}()
+	fmt.Println("product service running on rest port 3001")
 	app.Listen(":3001")
 }
