@@ -2,6 +2,8 @@ package controller
 
 import (
 	"context"
+	uuid "github.com/satori/go.uuid"
+	"product-service/internal/product"
 	"product-service/internal/product/pb"
 	"product-service/internal/product/service"
 )
@@ -25,8 +27,22 @@ func NewProductGrpcController(productService service.ProductServiceInterface) *P
 	}
 }
 
-func (*ProductGrpcController) Create(context.Context, *pb.Product) (*pb.Product, error) {
-	return nil, nil
+func (pc *ProductGrpcController) Create(ctx context.Context, p *pb.Product) (*pb.Product, error) {
+	newProduct := new(product.Product)
+	newProduct.ID = uuid.NewV4()
+	newProduct.Name = p.Name
+	newProduct.Type = p.Type
+	newProduct.Value = float64(p.Value)
+	productCreated, err := pc.service.Create(newProduct)
+	if err != nil {
+		return nil, err
+	}
+	product := &pb.Product{
+		Value: float32(productCreated.Value),
+		Name:  productCreated.Name,
+		Type:  productCreated.Type,
+	}
+	return product, nil
 }
 
 func GetById(context.Context, *pb.ID) (*pb.Product, error) {

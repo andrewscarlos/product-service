@@ -4,11 +4,9 @@ import (
 	"time"
 
 	uuid "github.com/satori/go.uuid"
-	"gorm.io/gorm"
 )
 
 type Product struct {
-	gorm.Model
 	ID        uuid.UUID `json:"id"`
 	Name      string    `json:"name"`
 	Type      string    `json:"type"`
